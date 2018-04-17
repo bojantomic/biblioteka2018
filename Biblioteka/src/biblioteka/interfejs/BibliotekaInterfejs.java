@@ -32,7 +32,7 @@ public interface BibliotekaInterfejs {
 	/**
 	 * Pronalazi i vraca listu sa svim knjigama iz biblioteke koji odgovaraju upitu.
 	 * 
-	 * Nem oraju se uneti svi parametri, oni koji budu null se ne uzimaju u razmatranje prilikom pretrage
+	 * Ne moraju se uneti svi parametri, oni koji budu null se ne uzimaju u razmatranje prilikom pretrage
 	 * 
 	 * @param autor autor knjige
 	 * @param isbn isbn knjige
@@ -47,4 +47,20 @@ public interface BibliotekaInterfejs {
 			String izdavac);
 	
 
+	/**
+	 * Deserijalizuje (ucitava) sve knjige iz fajla i unosi ih u biblioteku.
+	 * 
+	 * Pre ucitavanja se brise postojeci sadrzaj biblioteke.
+	 * 
+	 * @param fajl putanja do fajla sa serijalizovanim knjigama.
+	 */
+	public void ucitajKnjige(String fajl);
+	
+	/**
+	 * Serijalizuje (cuva) sve knjige iz biblioteke u fajl.
+	 * 
+	 * @param fajl putanja do fajla u koji treba sacuvati (serijalizovati) knjige.
+	 */
+	public void sacuvajKnjige(String fajl);
+	
 }

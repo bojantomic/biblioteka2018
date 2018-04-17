@@ -1,5 +1,11 @@
 package biblioteka;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import biblioteka.interfejs.BibliotekaInterfejs;
@@ -81,5 +87,47 @@ public class Biblioteka implements BibliotekaInterfejs{
 		
 		return novaLista;
 	}
+
+	/**
+	 * Deserijalizuje (ucitava) sve knjige iz fajla i unosi ih u biblioteku.
+	 * 
+	 * Pre ucitavanja se brise postojeci sadrzaj biblioteke.
+	 * 
+	 * @param fajl putanja do fajla sa serijalizovanim knjigama.
+	 */
+	@Override
+	public void ucitajKnjige(String fajl) {
+		try(ObjectInputStream in = 
+			 new ObjectInputStream(
+				new BufferedInputStream(
+						new FileInputStream(fajl)))){
+		
+			knjige = (LinkedList<Knjiga>)(in.readObject());
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Serijalizuje (cuva) sve knjige iz biblioteke u fajl.
+	 * 
+	 * @param fajl putanja do fajla u koji treba sacuvati (serijalizovati) knjige.
+	 */
+	@Override
+	public void sacuvajKnjige(String fajl){
+		try(ObjectOutputStream out = 
+				 new ObjectOutputStream(
+					new BufferedOutputStream(
+							new FileOutputStream(fajl)))){
+			
+				out.writeObject(knjige);
+			}
+			catch(Exception e) {
+				throw new RuntimeException(e);
+			}
+	}
+	
+	
 
 }
