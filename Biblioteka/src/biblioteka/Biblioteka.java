@@ -95,6 +95,7 @@ public class Biblioteka implements BibliotekaInterfejs{
 	 * 
 	 * @param fajl putanja do fajla sa serijalizovanim knjigama.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void ucitajKnjige(String fajl) {
 		try(ObjectInputStream in = 

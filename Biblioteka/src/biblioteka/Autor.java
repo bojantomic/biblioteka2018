@@ -1,5 +1,7 @@
 package biblioteka;
 
+import java.io.Serializable;
+
 /**
  * Klasa koja predstavlja autora knjige.
  * 
@@ -7,8 +9,13 @@ package biblioteka;
  * @version 1.0
  *
  */
-public class Autor {
-	
+public class Autor implements Serializable {
+		
+	/**
+	 * Generated serial version UID
+	 */
+	private static final long serialVersionUID = -947036814239167726L;
+
 	/**
 	 * Ime autora
 	 */

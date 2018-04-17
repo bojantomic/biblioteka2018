@@ -1,8 +1,5 @@
 package biblioteka.gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -23,6 +20,10 @@ import javax.swing.SpinnerNumberModel;
 
 public class DodajKnjiguProzor extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblIsbn;
 	private JTextField textFieldISBN;
@@ -42,7 +43,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField textFieldAutor2Prezime;
 	private JButton btnUnesi;
 	private JButton btnOdustani;
-	
+
 	private GlavniProzor gp;
 
 	/**
@@ -50,9 +51,11 @@ public class DodajKnjiguProzor extends JFrame {
 	 */
 	public DodajKnjiguProzor(GlavniProzor gp) {
 		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(DodajKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(DodajKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
 		setTitle("Dodaj knjigu");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(gp);
 		setBounds(100, 100, 306, 281);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,7 +79,7 @@ public class DodajKnjiguProzor extends JFrame {
 		contentPane.add(getTextFieldAutor2Prezime());
 		contentPane.add(getBtnUnesi());
 		contentPane.add(getBtnOdustani());
-		
+
 		this.gp = gp;
 	}
 
@@ -86,6 +89,7 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return lblIsbn;
 	}
+
 	private JTextField getTextFieldISBN() {
 		if (textFieldISBN == null) {
 			textFieldISBN = new JTextField();
@@ -93,12 +97,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldISBN;
 	}
+
 	private JLabel getLblNaslov() {
 		if (lblNaslov == null) {
 			lblNaslov = new JLabel("Naslov");
 		}
 		return lblNaslov;
 	}
+
 	private JTextField getTextFieldNaslov() {
 		if (textFieldNaslov == null) {
 			textFieldNaslov = new JTextField();
@@ -106,12 +112,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldNaslov;
 	}
+
 	private JLabel getLblIzdavac() {
 		if (lblIzdavac == null) {
 			lblIzdavac = new JLabel("Izdavac");
 		}
 		return lblIzdavac;
 	}
+
 	private JTextField getTextFieldIzdavac() {
 		if (textFieldIzdavac == null) {
 			textFieldIzdavac = new JTextField();
@@ -119,12 +127,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldIzdavac;
 	}
+
 	private JLabel getLblIzdanje() {
 		if (lblIzdanje == null) {
 			lblIzdanje = new JLabel("Izdanje");
 		}
 		return lblIzdanje;
 	}
+
 	private JSpinner getSpinnerIzdanje() {
 		if (spinnerIzdanje == null) {
 			spinnerIzdanje = new JSpinner();
@@ -132,12 +142,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return spinnerIzdanje;
 	}
+
 	private JLabel getLblAutorIme() {
 		if (lblAutorIme == null) {
 			lblAutorIme = new JLabel("Autor1 ime");
 		}
 		return lblAutorIme;
 	}
+
 	private JTextField getTextFieldAutor1Ime() {
 		if (textFieldAutor1Ime == null) {
 			textFieldAutor1Ime = new JTextField();
@@ -145,12 +157,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldAutor1Ime;
 	}
+
 	private JLabel getLblAutorPrezime() {
 		if (lblAutorPrezime == null) {
 			lblAutorPrezime = new JLabel("Autor 1 prezime");
 		}
 		return lblAutorPrezime;
 	}
+
 	private JTextField getTextFieldAutor1Prezime() {
 		if (textFieldAutor1Prezime == null) {
 			textFieldAutor1Prezime = new JTextField();
@@ -158,12 +172,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldAutor1Prezime;
 	}
+
 	private JLabel getLblAutorIme_1() {
 		if (lblAutorIme_1 == null) {
 			lblAutorIme_1 = new JLabel("Autor 2 ime");
 		}
 		return lblAutorIme_1;
 	}
+
 	private JTextField getTextFieldAutor2Ime() {
 		if (textFieldAutor2Ime == null) {
 			textFieldAutor2Ime = new JTextField();
@@ -171,12 +187,14 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldAutor2Ime;
 	}
+
 	private JLabel getLblAutorPrezime_1() {
 		if (lblAutorPrezime_1 == null) {
 			lblAutorPrezime_1 = new JLabel("Autor 2 prezime");
 		}
 		return lblAutorPrezime_1;
 	}
+
 	private JTextField getTextFieldAutor2Prezime() {
 		if (textFieldAutor2Prezime == null) {
 			textFieldAutor2Prezime = new JTextField();
@@ -184,49 +202,19 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return textFieldAutor2Prezime;
 	}
+
 	private JButton getBtnUnesi() {
 		if (btnUnesi == null) {
 			btnUnesi = new JButton("Unesi");
 			btnUnesi.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						Knjiga k = new Knjiga();
-						
-						k.setIsbn(textFieldISBN.getText());
-						k.setNaslov(textFieldNaslov.getText());
-						k.setIzdavac(textFieldIzdavac.getText());
-						k.setIzdanje(
-								(Integer)(spinnerIzdanje.getValue()));
-						
-						Autor a1 = new Autor();
-						a1.setIme(textFieldAutor1Ime.getText());
-						a1.setPrezime(textFieldAutor1Prezime.getText());
-						
-						Autor a2 = new Autor();
-						a2.setIme(textFieldAutor2Ime.getText());
-						a2.setPrezime(textFieldAutor2Prezime.getText());
-						
-						Autor[] niz = new Autor[2];
-						niz[0] = a1;
-						niz[1] = a2;
-						
-						k.setAutori(niz);
-						
-						GlavniProzor.biblioteka.dodajKnjigu(k);
-						
-						gp.prikaziSveKnjige();
-						
-						dispose();
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null,
-								e1.getMessage(), "Greska",
-								JOptionPane.ERROR_MESSAGE);
-					}
+					dodaj();
 				}
 			});
 		}
 		return btnUnesi;
 	}
+
 	private JButton getBtnOdustani() {
 		if (btnOdustani == null) {
 			btnOdustani = new JButton("Odustani");
@@ -237,5 +225,45 @@ public class DodajKnjiguProzor extends JFrame {
 			});
 		}
 		return btnOdustani;
+	}
+
+	private void dodaj() {
+		try {
+			Knjiga k = new Knjiga();
+
+			k.setIsbn(textFieldISBN.getText());
+			k.setNaslov(textFieldNaslov.getText());
+			k.setIzdavac(textFieldIzdavac.getText());
+			k.setIzdanje((Integer) (spinnerIzdanje.getValue()));
+
+			Autor a1 = new Autor();
+			a1.setIme(textFieldAutor1Ime.getText());
+			a1.setPrezime(textFieldAutor1Prezime.getText());
+
+			Autor[] niz;
+
+			if (!textFieldAutor2Ime.getText().isEmpty() || !textFieldAutor2Prezime.getText().isEmpty()) {
+
+				Autor a2 = new Autor();
+				a2.setIme(textFieldAutor2Ime.getText());
+				a2.setPrezime(textFieldAutor2Prezime.getText());
+
+				niz = new Autor[2];
+				niz[0] = a1;
+				niz[1] = a2;
+			} else {
+				niz = new Autor[1];
+				niz[0] = a1;
+			}
+			k.setAutori(niz);
+
+			GlavniProzor.biblioteka.dodajKnjigu(k);
+
+			gp.prikaziSveKnjige();
+
+			dispose();
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

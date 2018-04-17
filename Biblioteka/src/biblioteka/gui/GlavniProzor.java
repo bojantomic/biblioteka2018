@@ -1,60 +1,46 @@
 package biblioteka.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.GridLayout;
 import javax.swing.JButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
-import javax.swing.JSlider;
-import javax.swing.JTree;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.AbstractListModel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
 
 import biblioteka.Biblioteka;
+import biblioteka.Knjiga;
 import biblioteka.interfejs.BibliotekaInterfejs;
-import java.awt.Dimension;
 
 public class GlavniProzor extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
@@ -71,8 +57,7 @@ public class GlavniProzor extends JFrame {
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmOpen_1;
 	private JMenuItem mntmSave_1;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-
+	
 	static BibliotekaInterfejs biblioteka =
 			new Biblioteka();
 	private JScrollPane scrollPane;
@@ -168,15 +153,7 @@ public class GlavniProzor extends JFrame {
 			mntmOpen = new JMenuItem("Open");
 			mntmOpen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser fc = new JFileChooser();
-					
-					int opcija = fc.showOpenDialog(null);
-					
-					if (opcija == JFileChooser.APPROVE_OPTION) {
-						File f = fc.getSelectedFile();
-						
-						System.out.println(f.getAbsolutePath());
-					}
+					ucitaj();
 				}
 			});
 			mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
@@ -189,16 +166,7 @@ public class GlavniProzor extends JFrame {
 			mntmSave = new JMenuItem("Save");
 			mntmSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				
-					JFileChooser fc = new JFileChooser();
-					
-					int opcija = fc.showSaveDialog(null);
-					
-					if (opcija == JFileChooser.APPROVE_OPTION) {
-						File f = fc.getSelectedFile();
-						
-						System.out.println(f.getAbsolutePath());
-					}
+					sacuvaj();
 				}
 			});
 			mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -295,6 +263,11 @@ public class GlavniProzor extends JFrame {
 	private JMenuItem getMntmOpen_1() {
 		if (mntmOpen_1 == null) {
 			mntmOpen_1 = new JMenuItem("Open");
+			mntmOpen_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ucitaj();
+				}
+			});
 			mntmOpen_1.setIcon(new ImageIcon(GlavniProzor.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
 		}
 		return mntmOpen_1;
@@ -302,6 +275,11 @@ public class GlavniProzor extends JFrame {
 	private JMenuItem getMntmSave_1() {
 		if (mntmSave_1 == null) {
 			mntmSave_1 = new JMenuItem("Save");
+			mntmSave_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sacuvaj();
+				}
+			});
 			mntmSave_1.setIcon(new ImageIcon(GlavniProzor.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
 		}
 		return mntmSave_1;
@@ -322,7 +300,7 @@ public class GlavniProzor extends JFrame {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setPreferredSize(new Dimension(120, 10));
+			panel.setPreferredSize(new Dimension(140, 10));
 			panel.add(getBtnDodajKnjigu());
 			panel.add(getBtnObrisiKnjigu());
 			panel.add(getBtnPronadjiKnjigu());
@@ -357,9 +335,42 @@ public class GlavniProzor extends JFrame {
 	}
 	
 	public void prikaziSveKnjige() {
-		Object[] niz = biblioteka.vratiSveKnjige().toArray();
+		list.setListData(biblioteka.vratiSveKnjige().toArray());
+	}
+
+	private void sacuvaj() {
+		JFileChooser fc = new JFileChooser();
 		
-		list.setListData(niz);
+		int opcija = fc.showSaveDialog(null);
+		
+		if (opcija == JFileChooser.APPROVE_OPTION) {
+			File f = fc.getSelectedFile();
+			
+			try {
+				biblioteka.sacuvajKnjige(f.getAbsolutePath());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(gp, 
+						e.getMessage(), "Greska",JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	private void ucitaj() {
+		JFileChooser fc = new JFileChooser();
+		
+		int opcija = fc.showOpenDialog(null);
+		
+		if (opcija == JFileChooser.APPROVE_OPTION) {
+			File f = fc.getSelectedFile();
+			
+			try {
+				biblioteka.ucitajKnjige(f.getAbsolutePath());
+				prikaziSveKnjige();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(gp, 
+						e.getMessage(), "Greska",JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
 	

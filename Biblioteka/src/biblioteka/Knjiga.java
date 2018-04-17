@@ -1,5 +1,6 @@
 package biblioteka;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -8,8 +9,13 @@ import java.util.Arrays;
  * @version 1.0
  *
  */
-public class Knjiga {
+public class Knjiga implements Serializable {
 	
+	/**
+	 * Generated serial version UID
+	 */
+	private static final long serialVersionUID = 7226253925652679998L;
+
 	/**
 	 * 	Naslov knjige
 	 */
