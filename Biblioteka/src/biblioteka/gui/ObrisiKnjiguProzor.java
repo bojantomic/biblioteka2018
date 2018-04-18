@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SpinnerNumberModel;
 
-public class DodajKnjiguProzor extends JFrame {
+public class ObrisiKnjiguProzor extends JFrame {
 
 	/**
 	 * 
@@ -41,19 +41,20 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField textFieldAutor2Ime;
 	private JLabel lblAutorPrezime_1;
 	private JTextField textFieldAutor2Prezime;
-	private JButton btnUnesi;
+	private JButton btnObrisi;
 	private JButton btnOdustani;
 
 	private GlavniProzor gp;
+	private Knjiga k;
 
 	/**
 	 * Create the frame.
 	 */
-	public DodajKnjiguProzor(GlavniProzor gp) {
+	public ObrisiKnjiguProzor(GlavniProzor gp, Knjiga k) {
 		setResizable(false);
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(DodajKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
-		setTitle("Dodaj knjigu");
+				Toolkit.getDefaultToolkit().getImage(ObrisiKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
+		setTitle("Obrisi knjigu");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 306, 281);
 		setLocationRelativeTo(gp);
@@ -77,10 +78,13 @@ public class DodajKnjiguProzor extends JFrame {
 		contentPane.add(getTextFieldAutor2Ime());
 		contentPane.add(getLblAutorPrezime_1());
 		contentPane.add(getTextFieldAutor2Prezime());
-		contentPane.add(getBtnUnesi());
+		contentPane.add(getBtnObrisi());
 		contentPane.add(getBtnOdustani());
 
 		this.gp = gp;
+		this.k = k;
+		
+		prikaziKnjigu(k);
 	}
 
 	private JLabel getLblIsbn() {
@@ -93,6 +97,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldISBN() {
 		if (textFieldISBN == null) {
 			textFieldISBN = new JTextField();
+			textFieldISBN.setEnabled(false);
 			textFieldISBN.setColumns(10);
 		}
 		return textFieldISBN;
@@ -108,6 +113,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldNaslov() {
 		if (textFieldNaslov == null) {
 			textFieldNaslov = new JTextField();
+			textFieldNaslov.setEnabled(false);
 			textFieldNaslov.setColumns(10);
 		}
 		return textFieldNaslov;
@@ -123,6 +129,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldIzdavac() {
 		if (textFieldIzdavac == null) {
 			textFieldIzdavac = new JTextField();
+			textFieldIzdavac.setEnabled(false);
 			textFieldIzdavac.setColumns(10);
 		}
 		return textFieldIzdavac;
@@ -138,6 +145,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JSpinner getSpinnerIzdanje() {
 		if (spinnerIzdanje == null) {
 			spinnerIzdanje = new JSpinner();
+			spinnerIzdanje.setEnabled(false);
 			spinnerIzdanje.setModel(new SpinnerNumberModel(1, 1, 100, 1));
 		}
 		return spinnerIzdanje;
@@ -153,6 +161,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldAutor1Ime() {
 		if (textFieldAutor1Ime == null) {
 			textFieldAutor1Ime = new JTextField();
+			textFieldAutor1Ime.setEnabled(false);
 			textFieldAutor1Ime.setColumns(10);
 		}
 		return textFieldAutor1Ime;
@@ -168,6 +177,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldAutor1Prezime() {
 		if (textFieldAutor1Prezime == null) {
 			textFieldAutor1Prezime = new JTextField();
+			textFieldAutor1Prezime.setEnabled(false);
 			textFieldAutor1Prezime.setColumns(10);
 		}
 		return textFieldAutor1Prezime;
@@ -183,6 +193,7 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldAutor2Ime() {
 		if (textFieldAutor2Ime == null) {
 			textFieldAutor2Ime = new JTextField();
+			textFieldAutor2Ime.setEnabled(false);
 			textFieldAutor2Ime.setColumns(10);
 		}
 		return textFieldAutor2Ime;
@@ -198,21 +209,22 @@ public class DodajKnjiguProzor extends JFrame {
 	private JTextField getTextFieldAutor2Prezime() {
 		if (textFieldAutor2Prezime == null) {
 			textFieldAutor2Prezime = new JTextField();
+			textFieldAutor2Prezime.setEnabled(false);
 			textFieldAutor2Prezime.setColumns(10);
 		}
 		return textFieldAutor2Prezime;
 	}
 
-	private JButton getBtnUnesi() {
-		if (btnUnesi == null) {
-			btnUnesi = new JButton("Unesi");
-			btnUnesi.addActionListener(new ActionListener() {
+	private JButton getBtnObrisi() {
+		if (btnObrisi == null) {
+			btnObrisi = new JButton("Obrisi");
+			btnObrisi.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dodaj();
+					obrisi();
 				}
 			});
 		}
-		return btnUnesi;
+		return btnObrisi;
 	}
 
 	private JButton getBtnOdustani() {
@@ -226,38 +238,29 @@ public class DodajKnjiguProzor extends JFrame {
 		}
 		return btnOdustani;
 	}
+	
+	private void prikaziKnjigu(Knjiga k2) {
+		textFieldISBN.setText(k.getIsbn());
+		textFieldNaslov.setText(k.getNaslov());
+		textFieldIzdavac.setText(k.getIzdavac());
+		spinnerIzdanje.setValue(k.getIzdanje());
 
-	private void dodaj() {
+		Autor[] niz = k.getAutori();
+
+		textFieldAutor1Ime.setText(niz[0].getIme());
+		textFieldAutor1Prezime.setText(niz[0].getPrezime());
+
+		if (niz.length > 1) {
+
+			textFieldAutor2Ime.setText(niz[1].getIme());
+			textFieldAutor2Prezime.setText(niz[1].getPrezime());
+		}
+		
+	}
+
+	private void obrisi() {
 		try {
-			Knjiga k = new Knjiga();
-
-			k.setIsbn(textFieldISBN.getText());
-			k.setNaslov(textFieldNaslov.getText());
-			k.setIzdavac(textFieldIzdavac.getText());
-			k.setIzdanje((Integer) (spinnerIzdanje.getValue()));
-
-			Autor a1 = new Autor();
-			a1.setIme(textFieldAutor1Ime.getText());
-			a1.setPrezime(textFieldAutor1Prezime.getText());
-
-			Autor[] niz;
-
-			if (!textFieldAutor2Ime.getText().isEmpty() || !textFieldAutor2Prezime.getText().isEmpty()) {
-
-				Autor a2 = new Autor();
-				a2.setIme(textFieldAutor2Ime.getText());
-				a2.setPrezime(textFieldAutor2Prezime.getText());
-
-				niz = new Autor[2];
-				niz[0] = a1;
-				niz[1] = a2;
-			} else {
-				niz = new Autor[1];
-				niz[0] = a1;
-			}
-			k.setAutori(niz);
-
-			GlavniProzor.biblioteka.dodajKnjigu(k);
+			GlavniProzor.biblioteka.obrisiKnjigu(k);
 
 			gp.prikaziSveKnjige();
 

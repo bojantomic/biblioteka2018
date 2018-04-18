@@ -324,6 +324,11 @@ public class GlavniProzor extends JFrame {
 	private JButton getBtnObrisiKnjigu() {
 		if (btnObrisiKnjigu == null) {
 			btnObrisiKnjigu = new JButton("Obrisi knjigu");
+			btnObrisiKnjigu.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					prikaziObrisiKnjiguProzor((Knjiga)(list.getSelectedValue()));
+				}
+			});
 		}
 		return btnObrisiKnjigu;
 	}
@@ -371,6 +376,11 @@ public class GlavniProzor extends JFrame {
 						e.getMessage(), "Greska",JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	private void prikaziObrisiKnjiguProzor(Knjiga k){
+		ObrisiKnjiguProzor okp = new ObrisiKnjiguProzor(gp, k);
+		okp.setVisible(true);
 	}
 	
 	
