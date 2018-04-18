@@ -335,6 +335,11 @@ public class GlavniProzor extends JFrame {
 	private JButton getBtnPronadjiKnjigu() {
 		if (btnPronadjiKnjigu == null) {
 			btnPronadjiKnjigu = new JButton("Pronadji knjigu");
+			btnPronadjiKnjigu.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					prikaziPronadjiKnjiguProzor();
+				}
+			});
 		}
 		return btnPronadjiKnjigu;
 	}
@@ -381,6 +386,11 @@ public class GlavniProzor extends JFrame {
 	private void prikaziObrisiKnjiguProzor(Knjiga k){
 		ObrisiKnjiguProzor okp = new ObrisiKnjiguProzor(gp, k);
 		okp.setVisible(true);
+	}
+	
+	private void prikaziPronadjiKnjiguProzor(){
+		PronadjiKnjiguProzor pkp = new PronadjiKnjiguProzor(gp);
+		pkp.setVisible(true);
 	}
 	
 	
