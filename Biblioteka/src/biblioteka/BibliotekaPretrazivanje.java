@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import biblioteka.interfejs.BibliotekaInterfejs;
+import biblioteka.interfejs.BibliotekaInterfejsPretrazivanje;
 import biblioteka.sistemskeoperacije.SODodajKnjigu;
 import biblioteka.sistemskeoperacije.SOObrisiKnjigu;
 import biblioteka.sistemskeoperacije.SOPronadjiKnjigu;
@@ -21,44 +22,13 @@ import biblioteka.sistemskeoperacije.SOUcitajKnjige;
  * @version 1.0
  *
  */
-public class Biblioteka implements BibliotekaInterfejs{
+public class BibliotekaPretrazivanje implements BibliotekaInterfejsPretrazivanje{
 
 	/**
 	 * Lista knjiga dostupnih u biblioteci
 	 */
 	private LinkedList<Knjiga> knjige = new LinkedList<Knjiga>();
 	
-	/**
-	 * Dodaje novu knjigu u ponudu biblioteke
-	 * @param k nova knjiga koja se dodaje u biblioteku
-	 * @throws java.lang.RuntimeException ako je uneta knjiga null ili se vec
-	 * nalazi u biblioteci ista takva
-	 */
-	@Override
-	public void dodajKnjigu(Knjiga k) {
-		SODodajKnjigu.izvrsi(k, knjige);	
-	}
-
-	/**
-	 * Brise knjigu iz ponude biblioteke
-	 * @param k knjiga koju je potrebno obrisati
-	 * @throws java.lang.RuntimeException ako je uneta knjiga null ili se ne
-	 * moze naci u biblioteci
-	 */
-	@Override
-	public void obrisiKnjigu(Knjiga k) {
-		SOObrisiKnjigu.izvrsi(k, knjige);
-	}
-
-	/**
-	 * Vraca celokupnu ponudu knjiga iz biblioteke
-	 * @return lista svih knjiga iz biblioteke
-	 */
-	@Override
-	public LinkedList<Knjiga> vratiSveKnjige() {
-		return knjige;
-	}
-
 	/**
 	 * Pronalazi i vraca listu sa svim knjigama iz biblioteke koji odgovaraju upitu.
 	 * 
@@ -91,17 +61,5 @@ public class Biblioteka implements BibliotekaInterfejs{
 	public void ucitajKnjige(String fajl) {
 		knjige = SOUcitajKnjige.izvrsi(fajl);
 	}
-
-	/**
-	 * Serijalizuje (cuva) sve knjige iz biblioteke u fajl.
-	 * 
-	 * @param fajl putanja do fajla u koji treba sacuvati (serijalizovati) knjige.
-	 */
-	@Override
-	public void sacuvajKnjige(String fajl){
-		SOSacuvajKnjige.izvrsi(fajl, knjige);
-	}
-	
-	
 
 }
