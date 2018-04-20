@@ -1,22 +1,20 @@
 package biblioteka.gui;
 
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
-import biblioteka.Autor;
-import biblioteka.Knjiga;
-
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.SpinnerNumberModel;
+import biblioteka.gui.kontroler.GUIKontroler;
 
 public class DodajKnjiguProzor extends JFrame {
 
@@ -44,19 +42,16 @@ public class DodajKnjiguProzor extends JFrame {
 	private JButton btnUnesi;
 	private JButton btnOdustani;
 
-	private GlavniProzor gp;
-
 	/**
 	 * Create the frame.
 	 */
-	public DodajKnjiguProzor(GlavniProzor gp) {
+	public DodajKnjiguProzor() {
 		setResizable(false);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(DodajKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
 		setTitle("Dodaj knjigu");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 306, 281);
-		setLocationRelativeTo(gp);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -79,8 +74,6 @@ public class DodajKnjiguProzor extends JFrame {
 		contentPane.add(getTextFieldAutor2Prezime());
 		contentPane.add(getBtnUnesi());
 		contentPane.add(getBtnOdustani());
-
-		this.gp = gp;
 	}
 
 	private JLabel getLblIsbn() {
@@ -208,7 +201,16 @@ public class DodajKnjiguProzor extends JFrame {
 			btnUnesi = new JButton("Unesi");
 			btnUnesi.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dodaj();
+					GUIKontroler.dodaj(textFieldNaslov.getText(),
+							textFieldISBN.getText(),
+							textFieldIzdavac.getText(),
+							(Integer)(spinnerIzdanje.getValue()),
+							textFieldAutor1Ime.getText(),
+							textFieldAutor1Prezime.getText(),
+							textFieldAutor2Ime.getText(),
+							textFieldAutor2Prezime.getText());
+					
+					dispose();
 				}
 			});
 		}
@@ -225,45 +227,5 @@ public class DodajKnjiguProzor extends JFrame {
 			});
 		}
 		return btnOdustani;
-	}
-
-	private void dodaj() {
-		try {
-			Knjiga k = new Knjiga();
-
-			k.setIsbn(textFieldISBN.getText());
-			k.setNaslov(textFieldNaslov.getText());
-			k.setIzdavac(textFieldIzdavac.getText());
-			k.setIzdanje((Integer) (spinnerIzdanje.getValue()));
-
-			Autor a1 = new Autor();
-			a1.setIme(textFieldAutor1Ime.getText());
-			a1.setPrezime(textFieldAutor1Prezime.getText());
-
-			Autor[] niz;
-
-			if (!textFieldAutor2Ime.getText().isEmpty() || !textFieldAutor2Prezime.getText().isEmpty()) {
-
-				Autor a2 = new Autor();
-				a2.setIme(textFieldAutor2Ime.getText());
-				a2.setPrezime(textFieldAutor2Prezime.getText());
-
-				niz = new Autor[2];
-				niz[0] = a1;
-				niz[1] = a2;
-			} else {
-				niz = new Autor[1];
-				niz[0] = a1;
-			}
-			k.setAutori(niz);
-
-			GlavniProzor.biblioteka.dodajKnjigu(k);
-
-			gp.prikaziSveKnjige();
-
-			dispose();
-		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }

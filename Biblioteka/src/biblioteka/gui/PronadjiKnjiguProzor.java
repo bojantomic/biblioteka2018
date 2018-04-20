@@ -1,24 +1,23 @@
 package biblioteka.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import biblioteka.Knjiga;
-
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.Toolkit;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.awt.event.ActionEvent;
+import biblioteka.gui.kontroler.GUIKontroler;
 
 public class PronadjiKnjiguProzor extends JFrame {
 
@@ -41,7 +40,7 @@ public class PronadjiKnjiguProzor extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PronadjiKnjiguProzor(GlavniProzor gp) {
+	public PronadjiKnjiguProzor() {
 		setTitle("Pronadji knjigu");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PronadjiKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -53,8 +52,6 @@ public class PronadjiKnjiguProzor extends JFrame {
 		setContentPane(contentPane);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 		contentPane.add(getPanel(), BorderLayout.SOUTH);
-		
-		this.gp = gp;
 	}
 
 	private JScrollPane getScrollPane() {
@@ -100,7 +97,7 @@ public class PronadjiKnjiguProzor extends JFrame {
 			btnPronadji = new JButton("Pronadji");
 			btnPronadji.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					pronadjiKnjigeIPrikazi();
+					prikaziKnjige(GUIKontroler.pronadjiKnjige(textFieldNaslov.getText()));
 				}
 			});
 		}
@@ -118,9 +115,7 @@ public class PronadjiKnjiguProzor extends JFrame {
 		return btnOdustani;
 	}
 	
-	private void pronadjiKnjigeIPrikazi() {
-		LinkedList<Knjiga> lista = GlavniProzor.biblioteka.pronadjiKnjigu(null, null, textFieldNaslov.getText(), null);
-		
-		list.setListData(lista.toArray());
+	public void prikaziKnjige(LinkedList<Knjiga> knjige) {
+		list.setListData(knjige.toArray());
 	}
 }

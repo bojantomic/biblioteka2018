@@ -3,7 +3,6 @@ package biblioteka.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -31,9 +29,8 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
-import biblioteka.Biblioteka;
 import biblioteka.Knjiga;
-import biblioteka.interfejs.BibliotekaInterfejs;
+import biblioteka.gui.kontroler.GUIKontroler;
 
 public class GlavniProzor extends JFrame {
 
@@ -58,8 +55,7 @@ public class GlavniProzor extends JFrame {
 	private JMenuItem mntmOpen_1;
 	private JMenuItem mntmSave_1;
 	
-	static BibliotekaInterfejs biblioteka =
-			new Biblioteka();
+	
 	private JScrollPane scrollPane;
 	private JList list;
 	private JPanel panel;
@@ -67,24 +63,6 @@ public class GlavniProzor extends JFrame {
 	private JButton btnObrisiKnjigu;
 	private JButton btnPronadjiKnjigu;
 	
-	private GlavniProzor gp;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GlavniProzor frame = new GlavniProzor();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -108,8 +86,6 @@ public class GlavniProzor extends JFrame {
 		setContentPane(contentPane);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 		contentPane.add(getPanel(), BorderLayout.EAST);
-		
-		this.gp = this;
 	}
 
 	private JMenuBar getMenuBar_1() {
@@ -153,7 +129,7 @@ public class GlavniProzor extends JFrame {
 			mntmOpen = new JMenuItem("Open");
 			mntmOpen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ucitaj();
+					GUIKontroler.ucitaj();
 				}
 			});
 			mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
@@ -166,7 +142,7 @@ public class GlavniProzor extends JFrame {
 			mntmSave = new JMenuItem("Save");
 			mntmSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					sacuvaj();
+					GUIKontroler.sacuvaj();
 				}
 			});
 			mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -265,7 +241,7 @@ public class GlavniProzor extends JFrame {
 			mntmOpen_1 = new JMenuItem("Open");
 			mntmOpen_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ucitaj();
+					GUIKontroler.ucitaj();
 				}
 			});
 			mntmOpen_1.setIcon(new ImageIcon(GlavniProzor.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
@@ -277,7 +253,7 @@ public class GlavniProzor extends JFrame {
 			mntmSave_1 = new JMenuItem("Save");
 			mntmSave_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					sacuvaj();
+					GUIKontroler.sacuvaj();
 				}
 			});
 			mntmSave_1.setIcon(new ImageIcon(GlavniProzor.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
@@ -312,10 +288,7 @@ public class GlavniProzor extends JFrame {
 			btnDodajKnjigu = new JButton("Dodaj knjigu");
 			btnDodajKnjigu.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					DodajKnjiguProzor dkp = 
-							new DodajKnjiguProzor(gp);
-					
-					dkp.setVisible(true);
+					GUIKontroler.prikaziDodajKnjiguProzor();
 				}
 			});
 		}
@@ -326,7 +299,7 @@ public class GlavniProzor extends JFrame {
 			btnObrisiKnjigu = new JButton("Obrisi knjigu");
 			btnObrisiKnjigu.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					prikaziObrisiKnjiguProzor((Knjiga)(list.getSelectedValue()));
+					GUIKontroler.prikaziObrisiKnjiguProzor((Knjiga)(list.getSelectedValue()));
 				}
 			});
 		}
@@ -337,61 +310,18 @@ public class GlavniProzor extends JFrame {
 			btnPronadjiKnjigu = new JButton("Pronadji knjigu");
 			btnPronadjiKnjigu.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					prikaziPronadjiKnjiguProzor();
+					GUIKontroler.prikaziPronadjiKnjiguProzor();
 				}
 			});
 		}
 		return btnPronadjiKnjigu;
 	}
 	
-	public void prikaziSveKnjige() {
-		list.setListData(biblioteka.vratiSveKnjige().toArray());
+	public void prikaziSveKnjige(LinkedList<Knjiga> knjige) {
+		list.setListData(knjige.toArray());
 	}
 
-	private void sacuvaj() {
-		JFileChooser fc = new JFileChooser();
-		
-		int opcija = fc.showSaveDialog(null);
-		
-		if (opcija == JFileChooser.APPROVE_OPTION) {
-			File f = fc.getSelectedFile();
-			
-			try {
-				biblioteka.sacuvajKnjige(f.getAbsolutePath());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(gp, 
-						e.getMessage(), "Greska",JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
-
-	private void ucitaj() {
-		JFileChooser fc = new JFileChooser();
-		
-		int opcija = fc.showOpenDialog(null);
-		
-		if (opcija == JFileChooser.APPROVE_OPTION) {
-			File f = fc.getSelectedFile();
-			
-			try {
-				biblioteka.ucitajKnjige(f.getAbsolutePath());
-				prikaziSveKnjige();
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(gp, 
-						e.getMessage(), "Greska",JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
 	
-	private void prikaziObrisiKnjiguProzor(Knjiga k){
-		ObrisiKnjiguProzor okp = new ObrisiKnjiguProzor(gp, k);
-		okp.setVisible(true);
-	}
-	
-	private void prikaziPronadjiKnjiguProzor(){
-		PronadjiKnjiguProzor pkp = new PronadjiKnjiguProzor(gp);
-		pkp.setVisible(true);
-	}
 	
 	
 }

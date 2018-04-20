@@ -1,22 +1,22 @@
 package biblioteka.gui;
 
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import biblioteka.Autor;
 import biblioteka.Knjiga;
-
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.SpinnerNumberModel;
+import biblioteka.gui.kontroler.GUIKontroler;
 
 public class ObrisiKnjiguProzor extends JFrame {
 
@@ -44,20 +44,18 @@ public class ObrisiKnjiguProzor extends JFrame {
 	private JButton btnObrisi;
 	private JButton btnOdustani;
 
-	private GlavniProzor gp;
 	private Knjiga k;
 
 	/**
 	 * Create the frame.
 	 */
-	public ObrisiKnjiguProzor(GlavniProzor gp, Knjiga k) {
+	public ObrisiKnjiguProzor(Knjiga k) {
 		setResizable(false);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(ObrisiKnjiguProzor.class.getResource("/icons/bluej-84-toned.jpg")));
 		setTitle("Obrisi knjigu");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 306, 281);
-		setLocationRelativeTo(gp);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,10 +79,9 @@ public class ObrisiKnjiguProzor extends JFrame {
 		contentPane.add(getBtnObrisi());
 		contentPane.add(getBtnOdustani());
 
-		this.gp = gp;
 		this.k = k;
 		
-		prikaziKnjigu(k);
+		prikaziKnjigu();
 	}
 
 	private JLabel getLblIsbn() {
@@ -220,7 +217,9 @@ public class ObrisiKnjiguProzor extends JFrame {
 			btnObrisi = new JButton("Obrisi");
 			btnObrisi.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					obrisi();
+					GUIKontroler.obrisi(k);
+					
+					dispose();
 				}
 			});
 		}
@@ -239,7 +238,7 @@ public class ObrisiKnjiguProzor extends JFrame {
 		return btnOdustani;
 	}
 	
-	private void prikaziKnjigu(Knjiga k2) {
+	private void prikaziKnjigu() {
 		textFieldISBN.setText(k.getIsbn());
 		textFieldNaslov.setText(k.getNaslov());
 		textFieldIzdavac.setText(k.getIzdavac());
@@ -258,15 +257,4 @@ public class ObrisiKnjiguProzor extends JFrame {
 		
 	}
 
-	private void obrisi() {
-		try {
-			GlavniProzor.biblioteka.obrisiKnjigu(k);
-
-			gp.prikaziSveKnjige();
-
-			dispose();
-		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
-		}
-	}
 }
